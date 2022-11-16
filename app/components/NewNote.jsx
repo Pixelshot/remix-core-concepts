@@ -7,7 +7,12 @@ import styles from './NewNote.css';
 
 function NewNote() {
   const data = useActionData(); // The most common use-case for this hook is form validation errors.
+
+  // useTransition will be changed to useNavigation in the near future
+  // To prepare for this change, it's easier to alias useTransition to useNavigation
+  // This hook tells you everything you need to know about a page transition to build pending navigation indicators and optimistic UI on data mutations. (Taken from Remix docs)
   const navigation = useNavigation();
+
   const isSubmitting = navigation.state === 'submitting';
   return (
     // <form></form> is for backend
@@ -29,6 +34,10 @@ function NewNote() {
         </button>
       </div>
     </Form>
+    // Upon submission, all inputs are then packaged into POST request.
+    // We can capture this request by creating an action() in a routes folder.
+    // action() contains an object which includes request where formData() lives.
+    // formData() is where the inputs are located and we can extract them out via their names attribute  that's located in form/Form.
   );
 }
 

@@ -1,5 +1,5 @@
 import { redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import NewNote, { links as newNoteLinks } from '~/components/NewNote';
 import NoteList, { links as noteListLinks } from '~/components/NoteList';
 import { getStoredNotes, storeNotes } from '~/data/notes';
@@ -25,6 +25,7 @@ export async function loader() {
 // get request simply returns the component itself
 // See vid #18 for more clarification
 export async function action({ request }) {
+  // formData() contains data from a submitted form.
   const formData = await request.formData();
   // const noteData = {
   //   title: formData.get('title'),
@@ -40,7 +41,7 @@ export async function action({ request }) {
 
     //return json({message: 'Title needs to have at least 5 words'})
 
-    // However, since Remix does this for us by default, we can omit the json keyword
+    // However, Remix does this by default. This means we can omit the json keyword
     return { message: 'Title needs to have at least 5 words' };
   }
   // Add New Note to Existing Notes
@@ -62,6 +63,20 @@ export async function action({ request }) {
   return redirect('/notes');
 }
 
+// links is for CSS
 export function links() {
   return [...newNoteLinks(), ...noteListLinks()];
+}
+
+// This is a notes specific error handling. For more info on error handlings(errorboundary), see root page
+export function ErrorBoundary({ error }) {
+  return (
+    <main className="error">
+      <h1>You have encountered an error in the notes section</h1>
+      <p>{error.message}</p>
+      <p>
+        Back to <Link to="/">Homepage</Link>
+      </p>
+    </main>
+  );
 }
