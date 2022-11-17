@@ -15,11 +15,21 @@ export default function NotesPage() {
   );
 }
 
-// loader()'s job is to communicate between backend and frontend
+// loader()'s job is to load data from backend to the frontend
+// loader() is triggered everytime there is a get request on that particular route file
+// Code inside of loader() and action() will only be executed on the backend, never on the frontend
 export async function loader() {
   const notes = await getStoredNotes();
   return notes;
 }
+
+// === === === === === === === === === === === === === === === === === === === === ===
+// Difference between loader() & action():
+
+// If we want to act on something that's been submitted(usually a form), we use action().
+
+// If we want to load data from the server/backend we use loader()
+// === === === === === === === === === === === === === === === === === === === === ===
 
 // action() is a server-side method provided by Remix to handle all non-get requests
 // get request simply returns the component itself
