@@ -5,6 +5,7 @@ import NoteList, { links as noteListLinks } from '~/components/NoteList';
 import { getStoredNotes, storeNotes } from '~/data/notes';
 
 export default function NotesPage() {
+  // Data wrapped in loader() is tranferred to the frontend by using the useLoaderData() hook
   const notes = useLoaderData();
 
   return (
