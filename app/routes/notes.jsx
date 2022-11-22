@@ -8,6 +8,8 @@ export default function NotesPage() {
   // Data wrapped in loader() is tranferred to the frontend by using the useLoaderData() hook
   const notes = useLoaderData();
 
+  // useLoaderData() & useActionData() can be called in any component, not just in routes
+
   return (
     <main>
       <NewNote />
@@ -32,9 +34,13 @@ export async function loader() {
 // If we want to load data from the server/backend we use loader()
 // === === === === === === === === === === === === === === === === === === === === ===
 
-// action() is a server-side method provided by Remix to handle all non-get requests
+// action() is a server-side method provided by Remix to handle all NON-get requests
 // get request simply returns the component itself
 // See vid #18 for more clarification
+// action() returns a prop.
+// Within that prop lies a request object
+// And inside of request, lies formData() that houses the inputs of a submitted form
+// They can be extracted via their name attributes over on the front-end
 export async function action({ request }) {
   // formData() contains data from a submitted form.
   const formData = await request.formData();
@@ -47,6 +53,9 @@ export async function action({ request }) {
   const noteData = Object.fromEntries(formData);
 
   // Simple validation
+  // Usually validation is done via front-end which gives us access to front-end functions like alert()
+  // But everything inside action() is all back-end. Which means we have no access to those functions
+  // What we can do instead is send data to the front-end via the 'return' keyword and let them take it from there
   if (noteData.title.trim().length < 5) {
     // Technically we need to parse data that we're sending into json format(Don't forget to import json from @remix-run/node):
 
