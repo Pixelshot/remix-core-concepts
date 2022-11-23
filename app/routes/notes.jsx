@@ -1,8 +1,14 @@
-import { redirect } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
+import { Link, useLoaderData, useCatch } from '@remix-run/react';
 import NewNote, { links as newNoteLinks } from '~/components/NewNote';
 import NoteList, { links as noteListLinks } from '~/components/NoteList';
 import { getStoredNotes, storeNotes } from '~/data/notes';
+
+// === === === === === === === === === === === === === === === === === === === === ===
+// Whenever we throw a response, Remix will run for the CatchBoundary() component,
+// Whenever we throw anything BUT a response, Remix will run ErrorBoundary() component
+// Whenever we return something, it runs the default page component
+// === === === === === === === === === === === === === === === === === === === === ===
 
 export default function NotesPage() {
   // Data wrapped in loader() is tranferred to the frontend by using the useLoaderData() hook
@@ -23,6 +29,15 @@ export default function NotesPage() {
 // Code inside of loader() and action() will only be executed on the backend, never on the frontend
 export async function loader() {
   const notes = await getStoredNotes();
+  if (!notes || notes.length === 0) {
+    throw json(
+      { message: 'Found no notes' },
+      {
+        status: 404,
+        statusText: 'Not Found',
+      }
+    );
+  }
   return notes;
 }
 
@@ -98,5 +113,22 @@ export function ErrorBoundary({ error }) {
         Back to <Link to="/">Homepage</Link>
       </p>
     </main>
+  );
+}
+
+// CatchBoundary() handles all response errors
+// A CatchBoundary() component has access to the status code and thrown response data through useCatch. - Remix doc
+export function CatchBoundary() {
+  const caughtResponse = useCatch();
+  const statusCode = caughtResponse.status;
+  const message = caughtResponse.data.message;
+  return (
+    <>
+      <NewNote />
+      <main className="error">
+        <h1>{statusCode}</h1>
+        <p>{message}</p>
+      </main>
+    </>
   );
 }
