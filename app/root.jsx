@@ -77,7 +77,7 @@ export function ErrorBoundary({ error }) {
 // We can catch them via useCatch()
 export function CatchBoundary() {
   const caughtResponse = useCatch();
-  console.log(caughtResponse);
+  // console.log(caughtResponse);
   // const message = caughtResponse.data.message;
   const statusCode = caughtResponse.status;
 

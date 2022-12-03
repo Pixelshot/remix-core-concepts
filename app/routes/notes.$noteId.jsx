@@ -1,3 +1,4 @@
+import { json } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import styles from '~/styles/note-details.css';
 import { getStoredNotes } from '~/data/notes';
@@ -36,5 +37,12 @@ export async function loader({ params }) {
   // console.log(params);
   const selectedNote = notes.find((note) => note.id === params.noteId);
   // The noteId part from params.noteId comes the filename that we have created
+
+  if (!selectedNote) {
+    throw json(
+      { message: `Could not locate path for #${params.noteId}` },
+      { status: 404 }
+    );
+  }
   return selectedNote;
 }
