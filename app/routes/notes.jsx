@@ -103,6 +103,26 @@ export function links() {
   return [...newNoteLinks(), ...noteListLinks()];
 }
 
+// function for Meta Data
+// MetaData that is set up on a page will merge together with a higher level page's metadata
+// If they have the same key name, the lower page's metadata will be chosen
+// For example, the meta() below contains a title key, the same key name can also be found in the root's metadata
+// The chosen metadata will be the one on this page instead of root
+// Where to place this function inside of a file doesn't matter
+// In other words, the order doesn't matter
+// this function returns a JavaScript Object that contains multiple datas
+// data is whatever exported by loader function
+// location is a window.location-like object that has some data about the current route
+// params is an object containing route params
+// parentsData is a hashmap of all the data exported by loader functions of current route and all of its parents
+// For more info: https://remix.run/docs/en/v1/api/conventions#page-context-in-meta-function
+export function meta() {
+  return {
+    title: 'All Notes ',
+    description: 'Manage your notes with ease',
+  };
+}
+
 // This is a notes specific error handling. For more info on error handlings(errorboundary), see root page
 export function ErrorBoundary({ error }) {
   return (

@@ -31,6 +31,15 @@ export function links() {
   return [{ rel: 'stylesheet', href: styles }];
 }
 
+// For more info on metadata, see notes.jsx
+// Remix provides a data object that can be used as a parameter inside of meta()
+// And within this data object, there is a data property that we can extract with destructuring
+// This second data property has access to data from loader()
+// We can use this to set the title dynamically
+export function meta({ data }) {
+  return { title: data.title };
+}
+
 // params is also available on action()
 export async function loader({ params }) {
   const notes = await getStoredNotes();
