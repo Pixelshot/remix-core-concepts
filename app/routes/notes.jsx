@@ -76,7 +76,7 @@ export async function action({ request }) {
 
     //return json({message: 'Title needs to have at least 5 words'})
 
-    // However, Remix does this by default. This means we can omit the json keyword
+    // However, Remix does this by default, which means we can omit the json keyword
     return { message: 'Title needs to have at least 5 words' };
   }
   // Add New Note to Existing Notes
